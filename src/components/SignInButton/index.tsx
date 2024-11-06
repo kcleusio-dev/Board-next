@@ -6,10 +6,11 @@ import { FiX } from 'react-icons/fi';
 
 export function SignInButton() {
 
+    //const [session] = useSession();
+
     const { data: session } = useSession()
 
     console.log(session);
-
 
     return session ? (
         <button

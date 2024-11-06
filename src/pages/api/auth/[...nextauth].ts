@@ -1,4 +1,5 @@
-import NextAuth from 'next-auth';
+import { Session } from 'inspector/promises';
+import NextAuth, { Profile } from 'next-auth';
 import GithubProvider from "next-auth/providers/github"
 
 /**export default NextAuth({
@@ -19,12 +20,12 @@ export const authOptions = {
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      scope: 'read:user'
+      //scope: 'read:user'
     }),
     // ...add more providers here
   ],
   callbacks: {
-    async session(session, profile) {
+    async session(session: Session, profile: Profile) {
       try {
         return {
           ...session,
@@ -39,15 +40,20 @@ export const authOptions = {
 
     },
     async signIn(user, account, profile) {
-      const { email } = user;
-      try {
-        return true;
-      } catch (err) {
-        console.log('DEU ALGUM ERRO', err);
-        return false;
 
+      const { email } = user;
+
+      try {
+
+        return true;
+
+      } catch (err) {
+
+        console.log('DEU ALGUM ERRO', err);
+        
+        return false;
       }
     }
   }
 }
-export default NextAuth(authOptions)
+export default NextAuth(authOptions);

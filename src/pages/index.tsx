@@ -4,7 +4,6 @@ import React from 'react';
 import { GetStaticProps } from 'next';
 
 
-
 export default function Home() {
   return (
     <>
