@@ -20,8 +20,6 @@ export default function Board({ user }: BoardProps) {
 
     const [input, setInput] = useState('');
     
-    //console.log(user.nome); 
-
     async function handleAddTask(e: FormEvent) {
         e.preventDefault();
 
@@ -110,9 +108,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     const session = await getSession({ req });
 
-    console.log(session);
+    //console.log(session);
 
-    if (!session) {
+    if (!session?.token.sub) {
         //se usuário não logado, redirecionar...
         return {
             redirect: {
@@ -122,11 +120,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
         }
     }
-    console.log(session.user)
 
     const user = {
-        nome: session?.user?.name ?? null,
-        id: session?.id ?? null
+        nome: session?.token.name ?? null,
+        id: session?.token.sub ?? null
     }
 
     return {
