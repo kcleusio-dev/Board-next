@@ -7,7 +7,7 @@ import styles from './styles.module.scss';
 import { FiCalendar, FiClock, FiEdit2, FiPlus, FiTrash } from "react-icons/fi";
 import { SupportButton } from "@/components/SupportButton";
 import db from "@/utils/firestore";
-import { collection, addDoc, getDocs, where, query } from "firebase/firestore";
+import { collection, addDoc, getDocs, where, query, deleteDoc, doc } from "firebase/firestore";
 import { format } from 'date-fns';
 
 type TaskList = {
@@ -65,6 +65,22 @@ export default function Board({ user, data }: BoardProps) {
             })
     }
 
+    async function handleDelete(id: string) {
+        const docRef = doc(db, 'tarefas', id);
+        await deleteDoc(docRef)
+            .then(() => {
+                alert(`Tarefa com id: ${id} Deletada com sucesso!`);
+                //console.log(`Tarefa com id: ${id} Deletada com sucesso!`);
+                const taskDeleted = taskList.filter(item => {
+                    return (item.id !== id)
+                });
+                setTaskList(taskDeleted);
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
     return (
         <>
             <Head>
@@ -101,13 +117,14 @@ export default function Board({ user, data }: BoardProps) {
                                         <FiCalendar size={20} color="#FFB800" />
                                         <time>{task.createdFormated}</time>
                                     </div>
+
                                     <button>
                                         <FiEdit2 size={20} color="#FFF" />
                                         <span>Editar</span>
                                     </button>
                                 </div>
 
-                                <button>
+                                <button onClick={() => handleDelete(task.id)}>
                                     <FiTrash size={20} color="#FF3636" />
                                     <span>Excluir</span>
                                 </button>
