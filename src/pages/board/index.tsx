@@ -35,8 +35,8 @@ export default function Board({ user, data }: BoardProps) {
     const [taskEdit, setTaskEdit] = useState<TaskList | null>(null);
 
     async function handleAddTask(e: FormEvent) {
+        
         e.preventDefault();
-
         if (input === '') {
             alert('Preencha alguma tarefa!');
             return;
@@ -49,7 +49,6 @@ export default function Board({ user, data }: BoardProps) {
                     const data = taskList;
                     const taskIndex = taskList.findIndex(item => item.id === taskEdit.id);
                     data[taskIndex].tarefa = input;
-
                     setTaskList(data);
                     setTaskEdit(null);
                     setInput('');
@@ -193,8 +192,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     const session = await getSession({ req });
 
-    //console.log(session);
-
     if (!session?.token.sub) {
         //se usuário não logado, redirecionar...
         return {
@@ -202,17 +199,14 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
                 destination: '/',
                 permanent: false
             }
-
         }
     }
-
-    //pegar tarefas from firebase
     /*
+    pegar tarefas from firebase
     const tasks = await firebase.firestore().collection('tarefas')
     .where('userId','==',session?.token.sub)
     .orderBy('created', 'asc').get();
     */
-
     const task = query(collection(db, 'tarefas'), where('userId', '==', session?.token.sub));
 
     const tasks = await getDocs(task);

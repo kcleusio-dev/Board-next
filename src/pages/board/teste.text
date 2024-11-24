@@ -1,0 +1,67 @@
+     * nova versão
+     * import { doc, getDoc } from "firebase/firestore";
+      import { db } from "../../firebaseConfig";
+      import { format } from "date-fns";
+
+export default async function handler(req, res) {
+  if (req.method === "GET") {
+    const { userId } = req.query; // Passe o `userId` na URL como parâmetro.
+
+    if (!userId) {
+      return res.status(400).json({ error: "Missing userId" });
+    }
+
+    try {
+      const taskDoc = doc(db, "tarefas", userId);
+      const snapshot = await getDoc(taskDoc);
+
+      if (!snapshot.exists()) {
+        return res.status(404).json({ error: "Task not found" });
+      }
+
+      const data = {
+        id: snapshot.id,
+        created: snapshot.data().created,
+        createdFormated: format(snapshot.data().created.toDate(), "dd MMM yyyy"),
+        tarefa: snapshot.data().tarefa,
+        userId: snapshot.data().userId,
+        nome: snapshot.data().nome,
+      };
+
+      const data = (tasks.docs.map(u => {
+    return {
+      id: u.id,
+      createdFormated: format(u.data().created.toDate(), 'dd MMM yyyy'),
+      ...u.data(),
+    }
+  }))
+
+      return res.status(200).json(data);
+    } catch (error) {
+      console.error("Error fetching task:", error);
+      return res.status(500).json({ error: "Failed to fetch task" });
+    }
+  } else {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+}
+
+     */
+
+
+
+    //const data = await firebase.firestore().collection('tarefas')
+    /*.doc(session.token.sub)
+    .get()
+    .then((snapshot) => {
+        const data = {
+            id: snapshot.id,
+            created: snapshot.data().created,
+            createdFormated: format(snapshot.data().created.toDate(), 'dd MMM yyyy'),
+            tarefa: snapshot.data().tarefa,
+            userId: snapshot.data().userId,
+            nome: snapshot.data().nome
+        }
+        return JSON.stringify(data);
+
+    })*/
