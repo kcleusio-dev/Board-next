@@ -16,7 +16,7 @@ export function SignInButton() {
             className={styles.signInButton}
             onClick={() => signOut()}
         >
-            <img src="https://sujeitoprogramador.com/steve.png" alt="Helder" />
+            <img src="https://avatars.githubusercontent.com/u/144366835?v=4" alt="Helder" />
             Olá, Hélder
             <FiX color="#737380" className={styles.closeIcon} />
         </button>

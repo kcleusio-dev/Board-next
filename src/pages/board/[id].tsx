@@ -2,7 +2,7 @@ import db from "@/utils/firestore";
 import { doc, getDoc, } from "firebase/firestore";
 import { GetServerSideProps } from "next"
 import { getSession } from "next-auth/react"
-import { format } from "path";
+import { format } from "date-fns";
 
 import styles from './task.module.scss';
 import Head from "next/head";
