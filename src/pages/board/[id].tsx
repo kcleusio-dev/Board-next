@@ -73,21 +73,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params }) =>
     return JSON.stringify(data);
   });
 
-  /*
-  const data = await firebase.firestore().collection('tarefas')
-    .doc(String(id)).get()
-    .then((snapshot) => {
-      const data = {
-        id: snapshot.id,
-        created: snapshot.data().created,
-        createdFormated: format(snapshot.data().created.toDate(), 'dd MMM yyyy'),
-        tarefa: snapshot.data().tarefa,
-        userId: snapshot.data().userId,
-        nome: snapshot.data().nome
-      }
-      return JSON.stringify(data);
-    });*/
-
   return {
     props: {
       data

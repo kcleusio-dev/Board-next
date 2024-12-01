@@ -1,7 +1,13 @@
 import { GetServerSideProps } from 'next';
 import styles from './style.module.scss';
 import Head from 'next/head';
+import { useState } from 'react';
 import { getSession } from 'next-auth/react';
+import { PayPalButtons } from '@paypal/react-paypal-js'
+import { doc, setDoc } from 'firebase/firestore';
+import db from '@/utils/firestore';
+
+
 
 interface DonateProps {
     user: {
@@ -12,6 +18,18 @@ interface DonateProps {
 }
 
 export default function Donate({ user }: DonateProps) {
+    const [vip, setVip] = useState(false);
+    async function handlerSAveDonate() {
+        //const userRef = doc(db, 'tarefas', user.id);
+
+        await setDoc(doc(db, 'users', user.id), {
+            donate: true,
+            lastDonate: new Date(),
+            image: user.image
+        }).then(() => {
+            setVip(true);
+        })
+    }
     return (
         <>
             <Head>
@@ -20,15 +38,37 @@ export default function Donate({ user }: DonateProps) {
             <main className={styles.container}>
                 <img src="/images/rocket.svg" alt="Seja apoiador" />
 
-                <div className={styles.vip}>
-                    <img src={user.image} alt="" />
-                    <span>Parabéns você é o novo apoiador!</span>
-
-                </div>
+                {vip && (
+                    <div className={styles.vip}>
+                        <img src={user.image} alt="" />
+                        <span>Parabéns você é o novo apoiador!</span>
+                    </div>
+                )}
 
                 <h1>Seja um apoiador deste projecto </h1>
-                <h3>Contribua com apenas <span>10,00 AOA</span></h3>
+                <h3>Contribua com apenas <span>1,00 USD</span></h3>
                 <strong>Aparece na nossa Home e tenha funcionalidades exclusivas</strong>
+
+                <PayPalButtons
+                    createOrder={(data, actions) => {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: '1'
+                                }
+                            }]
+                        })
+                    }}
+                    onApprove={
+                        (data, actions) => {
+                            return actions.order?.capture().then(function (details) {
+                                console.log('Compra aprovada: ' + details.payer?.name?.given_name);
+                                handlerSAveDonate();
+
+                            })
+                        }
+                    }
+                />
             </main>
         </>
     )
@@ -51,8 +91,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
         nome: session?.token.name ?? null,
         image: session?.token.picture ?? null
     }
-
-   console.log(user)
 
     return {
         props: {

@@ -73,7 +73,6 @@ export default function Board({ user, data }: BoardProps) {
                     userId: user.id,
                     nome: user.nome
                 };
-
                 setTaskList([...taskList, data]);
                 setInput('');
             })
@@ -169,9 +168,7 @@ export default function Board({ user, data }: BoardProps) {
 
                         </article>
                     ))}
-
                 </section>
-
             </main >
 
             <div className={styles.vipContanier}>

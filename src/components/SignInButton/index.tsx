@@ -6,7 +6,7 @@ import { FiX } from 'react-icons/fi';
 
 export function SignInButton() {
 
-    //const [session] = useSession();
+    //const [session] = useSession(); "https://avatars.githubusercontent.com/u/144366835?v=4"
 
     const { data: session } = useSession();
 
@@ -16,8 +16,8 @@ export function SignInButton() {
             className={styles.signInButton}
             onClick={() => signOut()}
         >
-            <img src="https://avatars.githubusercontent.com/u/144366835?v=4" alt="Helder" />
-            Olá, Hélder
+            <img src={session.token?.picture} alt="Helder" />
+            Olá, {session.token?.name}
             <FiX color="#737380" className={styles.closeIcon} />
         </button>
     ) : (
