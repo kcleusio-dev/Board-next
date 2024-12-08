@@ -1,5 +1,7 @@
 import NextAuth from 'next-auth';
-import GithubProvider from "next-auth/providers/github"
+import GithubProvider from "next-auth/providers/github";
+import db from '@/utils/firestore';
+import { collection, doc, getDoc } from 'firebase/firestore';
 
 /**export default NextAuth({
  
@@ -23,17 +25,32 @@ export const authOptions = {
     }),
     // ...add more providers here
   ],
+
   callbacks: {
     async session(session, profile) {
       try {
+
+        const last = doc(db, 'users', session.token.sub);
+        const lastDonate = await getDoc(last).then((snapshot) => {
+          if (snapshot.exists) {
+            return snapshot.data().lastDonate.toDate();
+          } else {
+            return null;
+          }
+        });
+
         return {
           ...session,
-          id: session.token.sub
+          id: session.token.sub,
+          vip: lastDonate ? true : false,
+          lastDonate: lastDonate
         }
       } catch {
         return {
           ...session,
-          id: null
+          id: null,
+          vip: false,
+          lastDonate: null
         }
       }
 
