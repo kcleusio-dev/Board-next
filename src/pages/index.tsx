@@ -42,7 +42,6 @@ export default function Home({ data }: HomeProps) {
               src={doador.image}
               alt="Principal" />
           ))}
-
         </div>
       </main>
 
