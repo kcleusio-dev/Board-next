@@ -9,7 +9,7 @@ import { SessionProvider as NextAuthProvider } from "next-auth/react"
 
 
 const initialOptions = {
-  'clientId': "Ae9pGYej0ToYH5qYBbFU0xLkBPi08coIy-5CV6wpbK2SgFjVtAdMGVbudq5uUuCZnQgPenfilS8ucYxg",
+  'clientId': "AWPF1t-BaphgnM-zlADdMNv5KzRUbroxPPnibpd5chY93GXGo6x30XWfuE6wvAfj_NhhoNEbgf_vWxjr",
   currency: "USD",
   intent: 'capture'
 }
