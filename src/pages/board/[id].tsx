@@ -60,18 +60,31 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params }) =>
   }
 
   const docRef = doc(db, 'tarefas', id);
-  const data = await getDoc(docRef).then(documentSnapshot => {
-    const data = {
-      id: documentSnapshot.id,
-      created: documentSnapshot.data().created,
-      createdFormated: format(documentSnapshot.data().created.toDate(), 'dd MMMM yyyy'),
-      tarefa: documentSnapshot.data().tarefa,
-      userId: documentSnapshot.data().userId,
-      nome: documentSnapshot.data().nome
-    }
+  const data = await getDoc(docRef).then(
+    documentSnapshot => {
+      const data = {
+        id: documentSnapshot.id,
+        created: documentSnapshot.data().created,
+        createdFormated: format(documentSnapshot.data().created.toDate(), 'dd MMMM yyyy'),
+        tarefa: documentSnapshot.data().tarefa,
+        userId: documentSnapshot.data().userId,
+        nome: documentSnapshot.data().nome
+      }
 
-    return JSON.stringify(data);
-  });
+      return JSON.stringify(data);
+    })
+    .catch(() => {
+      return {};
+    });
+
+  if (Object.keys(data).length === 0) {
+    return {
+      redirect: {
+        destination: '/board',
+        permanent: false
+      }
+    }
+  }
 
   return {
     props: {
